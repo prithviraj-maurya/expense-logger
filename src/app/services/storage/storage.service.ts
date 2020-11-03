@@ -12,12 +12,11 @@ export class StorageService {
 
   async setObject(key: string, value: any) {
     await Storage.set({
-      key,
+      "key": key,
       value: JSON.stringify(value)
     });
   }
 
-  // JSON "get" example
   async getObject(key: string): Promise<{ value: any }> {
     const ret = await Storage.get({ key });
     return JSON.parse(ret.value);
