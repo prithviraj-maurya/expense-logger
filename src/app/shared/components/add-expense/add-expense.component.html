@@ -3,4 +3,38 @@
     <ion-title>Add Expense</ion-title>
     <ion-icon name="close-circle-outline" slot="end" size="large" (click)="dismissModal()"></ion-icon>
   </ion-toolbar>
+  
+  <form [formGroup]="addExpenseForm">
+    <ion-item>
+      <ion-label>
+        Amount:
+        <ion-input placeholder="Enter Amount" type="text" formControlName="amount"></ion-input>
+      </ion-label>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label>
+        Description:
+        <ion-input placeholder="Enter Description" type="text" formControlName="description"></ion-input>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Select Type</ion-label>
+      <ion-select value="brown" okText="Okay" cancelText="Dismiss" formControlName="type">
+        <ion-select-option value="general">General</ion-select-option>
+        <ion-select-option value="groceries">Groceries</ion-select-option>
+        <ion-select-option value="meds">Meds</ion-select-option>
+        <ion-select-option value="clothes">Clothes</ion-select-option>
+      </ion-select>
+    </ion-item>
+  
+    <ion-item>
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button color="primary">Add</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-item>
+  </form>
 </ion-header>
