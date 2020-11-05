@@ -14,22 +14,26 @@ export class DashboardComponent implements OnInit {
   expenses: Expense[];
   totalSum: number = 0;
   constructor(private modalController: ModalController, private dataService: DataService) {
-    this.expenses = this.dataService.getExpenses();
-    this.calculateTotal();
+    this.dataService.getExpenses().then((expenses: Expense[]) => {
+      this.expenses = expenses;
+      this.calculateTotal();
+    });
    }
 
   ngOnInit() {}
 
   async presentModal() {
-    const modal = await this.modalController.create({
-      component: AddExpenseComponent,
-      cssClass: 'my-custom-class'
-    });
-    return await modal.present();
+    // TODO: uncomment this
+    // const modal = await this.modalController.create({
+    //   component: AddExpenseComponent,
+    //   cssClass: 'my-custom-class'
+    // });
+    // return await modal.present();
+    return await this.dataService.addExpense({ id: 1, amount: 100, description: 'Demo', type: 'Dummy', createdOn: new Date()});
   }
 
   calculateTotal() {
     this.totalSum = 0;
-    this.expenses.map(expense => this.totalSum += expense.amount);
+    this.expenses && this.expenses.map(expense => this.totalSum += expense.amount);
   }
 }

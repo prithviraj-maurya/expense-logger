@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
-import { DataService } from '../data/data.service';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActionService {
 
-  constructor(private dataService: DataService) { }
+  constructor() { }
+
+  getCurrentDate(date?: Date): string {
+    return date ? moment(date).format('L') : moment().format('L');
+  }
 }

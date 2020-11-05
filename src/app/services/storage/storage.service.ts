@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
+import { Expense } from 'src/app/model/expense';
 
 const { Storage } = Plugins;
 
@@ -17,7 +18,7 @@ export class StorageService {
     });
   }
 
-  async getObject(key: string): Promise<{ value: any }> {
+  async getObject(key: string): Promise<Expense[]> {
     const ret = await Storage.get({ key });
     return JSON.parse(ret.value);
   }

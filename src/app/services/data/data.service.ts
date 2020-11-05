@@ -3,7 +3,7 @@ import { Expense } from 'src/app/model/expense';
 import { __values } from 'tslib';
 import { StorageService } from '../storage/storage.service';
 
-import { expensesKey } from '../../model/expense';
+import { ActionService } from '../action/action.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,32 +11,22 @@ import { expensesKey } from '../../model/expense';
 export class DataService {
   private _expenses: Expense[] = [];
 
-  constructor(private storageService: StorageService) { }
+  constructor(private storageService: StorageService, private actionService: ActionService) { }
 
-  getExpenses(): Expense[] {
-    this.storageService.getObject("_cap_" + expensesKey).then(data => {
-      if(data) {
-        return data;
-      }
+  getExpenses(): Promise<Expense[]> {
+    const key: string = this.actionService.getCurrentDate();
+    return this.storageService.getObject(key).then(data => {
+      this._expenses = data || [];
+      return this._expenses;
     });
-    return this._expenses;
-  }
-
-  setExpenses(expenses: Expense[]) {
-    this._expenses = expenses;
   }
 
   addExpense(expense: Expense) {
-    expense.id = this._expenses.length;
     this._expenses.push(expense);
-    this.storeExpense(this._expenses);
+    this.setExpenses(this._expenses);
   }
 
-  storeExpense(expenses: Expense[]) {
-    this.storageService.setObject("expenses", expenses);
-  }
-
-  clearExpenses() {
-    this._expenses = [];
+  setExpenses(expenses: Expense[]) {
+    this.storageService.setObject(this.actionService.getCurrentDate(), expenses);
   }
 }

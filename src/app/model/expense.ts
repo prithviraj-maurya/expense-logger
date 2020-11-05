@@ -6,5 +6,3 @@ export interface Expense {
     type: string;
     createdOn: Date;
 }
-
-export const expensesKey = "expenses";
