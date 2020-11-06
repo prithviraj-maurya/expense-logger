@@ -32,7 +32,6 @@ export class AddExpenseComponent implements OnInit {
 
   addExpense() {
     const expense: Expense = this.addExpenseForm.value;
-    expense.createdOn = moment().toDate();
     this.dataService.addExpense(expense);
     this.dismissModal();
   }

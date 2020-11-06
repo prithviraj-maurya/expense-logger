@@ -6,3 +6,5 @@ export interface Expense {
     type: string;
     createdOn: Date;
 }
+
+export const installedDate = "InstalledDate";

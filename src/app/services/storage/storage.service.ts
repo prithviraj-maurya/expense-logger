@@ -18,7 +18,7 @@ export class StorageService {
     });
   }
 
-  async getObject(key: string): Promise<Expense[]> {
+  async getObject(key: string): Promise<any> {
     const ret = await Storage.get({ key });
     return JSON.parse(ret.value);
   }

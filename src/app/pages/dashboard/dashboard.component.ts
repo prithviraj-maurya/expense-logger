@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import * as moment from 'moment';
 import { Expense } from 'src/app/model/expense';
+import { ActionService } from 'src/app/services/action/action.service';
 import { DataService } from 'src/app/services/data/data.service';
 import { AddExpenseComponent } from 'src/app/shared/components/add-expense/add-expense.component';
 
@@ -13,14 +15,22 @@ export class DashboardComponent implements OnInit {
 
   expenses: Expense[];
   totalSum: number = 0;
-  constructor(private modalController: ModalController, private dataService: DataService) {
+  todaysDate: string;
+  dateSelected: Date;
+  constructor(private modalController: ModalController, private dataService: DataService, private actionService: ActionService) {
+    this.setExpenses();
+    this.todaysDate = moment().format();
+    this.resetDate();
+   }
+
+  ngOnInit() {}
+
+  setExpenses() {
     this.dataService.getExpenses().then((expenses: Expense[]) => {
       this.expenses = expenses;
       this.calculateTotal();
     });
-   }
-
-  ngOnInit() {}
+  }
 
   async presentModal() {
     // TODO: uncomment this
@@ -35,5 +45,17 @@ export class DashboardComponent implements OnInit {
   calculateTotal() {
     this.totalSum = 0;
     this.expenses && this.expenses.map(expense => this.totalSum += expense.amount);
+  }
+
+  selectedDate(date: string) {
+    this.dateSelected = this.actionService.createDateFromString(date);
+    this.dataService.setSelectedDate(this.dateSelected);
+    this.setExpenses();
+  }
+
+  resetDate() {
+    this.dateSelected = moment(this.todaysDate).toDate();
+    this.dataService.setSelectedDate(this.dateSelected);
+    this.setExpenses();
   }
 }

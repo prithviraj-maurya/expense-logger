@@ -8,7 +8,15 @@ export class ActionService {
 
   constructor() { }
 
-  getCurrentDate(date?: Date): string {
+  getCurrentDateString(date?: Date): string {
     return date ? moment(date).format('L') : moment().format('L');
+  }
+
+  getCurrentDate(date?: Date): Date {
+    return date ? moment(date).toDate() : moment().toDate();
+  }
+
+  createDateFromString(date: string): Date {
+    return moment(date).toDate();
   }
 }
