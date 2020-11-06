@@ -21,9 +21,9 @@ export class DashboardComponent implements OnInit {
     this.setExpenses();
     this.todaysDate = moment().format();
     this.resetDate();
-   }
+  }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   setExpenses() {
     this.dataService.getExpenses().then((expenses: Expense[]) => {
@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
     //   cssClass: 'my-custom-class'
     // });
     // return await modal.present();
-    return await this.dataService.addExpense({ id: 1, amount: 100, description: 'Demo', type: 'Dummy', createdOn: new Date()});
+    return await this.dataService.addExpense({ id: 1, amount: 100, description: 'Demo', type: 'Groceries', createdOn: new Date() });
   }
 
   calculateTotal() {
@@ -57,5 +57,12 @@ export class DashboardComponent implements OnInit {
     this.dateSelected = moment(this.todaysDate).toDate();
     this.dataService.setSelectedDate(this.dateSelected);
     this.setExpenses();
+  }
+
+  filterExpenses(value: string) {
+    this.dataService.getExpenses().then((expenses: Expense[]) => {
+      this.expenses = expenses.filter(expense => expense['type'] === value);;
+      this.calculateTotal();
+    });
   }
 }

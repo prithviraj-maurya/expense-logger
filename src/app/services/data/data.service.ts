@@ -19,7 +19,7 @@ export class DataService {
   }
 
   getExpenses(): Promise<Expense[]> {
-    const key: string = moment(this.dateSelected.toString()).format('L');
+    const key: string = moment(this.dateSelected.toISOString()).format('L');
     return this.storageService.getObject(key).then(data => {
       this._expenses = data || [];
       return this._expenses;
@@ -33,7 +33,7 @@ export class DataService {
   }
 
   setExpenses(expenses: Expense[]) {
-    this.storageService.setObject(moment(this.dateSelected.toString()).format('L'), expenses);
+    this.storageService.setObject(moment(this.dateSelected.toISOString()).format('L'), expenses);
   }
 
   getSelectedDate(): Date {
