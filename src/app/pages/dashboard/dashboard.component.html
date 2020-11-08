@@ -3,7 +3,7 @@
     <ion-card no-margin>
       <ion-card-header color="primary">
         <ion-card-title class="ion-text-center">
-          Today's Total: ${{ totalSum }}
+          Today's Total: ${{ totalSum  | number : '1.2-2'}}
         </ion-card-title>
         <ion-card-subtitle>{{ (dateSelected || todaysDate) | date}}</ion-card-subtitle>
       </ion-card-header>
@@ -64,7 +64,7 @@
           <ion-icon name="trash-outline" size="large"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title slot="start">Amount: {{ expense.amount }}</ion-title>
+      <ion-title slot="start">Amount: {{ expense.amount  | number : '1.2-2'}}</ion-title>
     </ion-toolbar>
     <ion-card-content>
       <ion-item>

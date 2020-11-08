@@ -9,6 +9,13 @@ export interface Expense {
 
 export const installedDate = "InstalledDate";
 
+export enum AppRoutes {
+    LOGIN = '/auth/login',
+    REGISTER = '/auth/register',
+    TABS = '/tabs',
+    AUTH = '/auth'
+}
+
 export enum ExpenseTypes {
     All,
     Games,
