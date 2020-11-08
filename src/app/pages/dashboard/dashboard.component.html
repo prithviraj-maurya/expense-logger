@@ -13,17 +13,16 @@
             <ion-button expand="full" fill="clear" (click)="resetDate()">Today</ion-button>
           </ion-col>
           <ion-col size="3">
-            <ion-item lines="none">
-              <ion-button fill="clear" expand="full" (click)="selected.open()">Date</ion-button>
-              <ion-datetime hidden #selected (ionChange)="selectedDate(selected.value)" [min]="2020" [max]="todaysDate">
+            <ion-button fill="clear" expand="full" (click)="selected.open()">Date</ion-button>
+            <ion-item lines="none" hidden>
+              <ion-datetime #selected (ionChange)="selectedDate(selected.value)" [min]="2020" [max]="todaysDate">
               </ion-datetime>
             </ion-item>
           </ion-col>
           <ion-col size="3">
-            <!-- <ion-button expand="full" fill="clear">Category</ion-button> -->
-            <ion-item>
-              <ion-button expand="full" fill="clear" (click)="categorySelect.open()">Category</ion-button>
-              <ion-select hidden #categorySelect placeholder="Select One">
+            <ion-button expand="full" fill="clear" (click)="categorySelect.open()">Category</ion-button>
+            <ion-item hidden>
+              <ion-select #categorySelect placeholder="Select One">
                 <ion-select-option [value]="type.value" *ngFor="let type of categories | keyvalue">{{ type.value }}</ion-select-option>
               </ion-select>
             </ion-item>

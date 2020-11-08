@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Expense, ExpenseTypes } from 'src/app/model/expense';
@@ -23,6 +23,17 @@ export class DashboardComponent implements OnInit {
     this.todaysDate = moment().format();
     this.resetDate();
     this.categories = ExpenseTypes;
+    this.dataService.getTodaysTotal()
+      .subscribe({
+        next: (total: number) => {
+          this.totalSum = total;
+        },
+        error: (err) => {
+          console.log(err);
+        },
+        complete: () => {
+        }
+      });
   }
 
   ngOnInit() { }
@@ -30,7 +41,6 @@ export class DashboardComponent implements OnInit {
   setExpenses() {
     this.dataService.getExpenses().then((expenses: Expense[]) => {
       this.expenses = expenses;
-      this.calculateTotal();
     });
   }
 
@@ -42,11 +52,6 @@ export class DashboardComponent implements OnInit {
     // });
     // return await modal.present();
     return await this.dataService.addExpense({ id: 1, amount: 100, description: 'Demo', type: 'Groceries', createdOn: new Date() });
-  }
-
-  calculateTotal() {
-    this.totalSum = 0;
-    this.expenses && this.expenses.map(expense => this.totalSum += expense.amount);
   }
 
   selectedDate(date: string) {
