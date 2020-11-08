@@ -56,11 +56,11 @@ export class DataService {
     this.calculateTodaysTotal();
   }
 
-  resetExpenses() {
-    this.storageService.clearStorage().then(() => {
+  resetExpenses(): Promise<void> {
+    return this.storageService.clearStorage().then(() => {
       this._expenses.length = 0;
+      this.calculateTodaysTotal();
     });
-    this.calculateTodaysTotal();
   }
 
   removeExpense(expense: Expense) {

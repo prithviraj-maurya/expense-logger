@@ -23,12 +23,19 @@
             <ion-button expand="full" fill="clear" (click)="categorySelect.open()">Category</ion-button>
             <ion-item hidden>
               <ion-select #categorySelect placeholder="Select One">
-                <ion-select-option [value]="type.value" *ngFor="let type of categories | keyvalue">{{ type.value }}</ion-select-option>
+                <ion-select-option [value]="type.value" *ngFor="let type of categories | keyvalue">{{ type.value }}
+                </ion-select-option>
               </ion-select>
             </ion-item>
           </ion-col>
           <ion-col size="3">
-            <ion-button expand="full" fill="clear">Amount</ion-button>
+            <ion-button expand="full" fill="clear" (click)="filterActionSheet()">
+              <ion-text *ngIf="sortIndex > 0">Amount <ion-icon
+                  [name]="sortIndex === 1 ? 'caret-up-outline' : 'caret-down-outline'">
+                </ion-icon>
+              </ion-text>
+              <ion-text *ngIf="sortIndex === 0">Filter</ion-text>
+            </ion-button>
           </ion-col>
         </ion-row>
       </ion-footer>
@@ -73,7 +80,7 @@
   </ion-card>
 </ion-content>
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button (click)="presentModal()">
+  <ion-fab-button (click)="presentModal()" color="success">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
 </ion-fab>

@@ -1,5 +1,5 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ActionSheetController, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Expense, ExpenseTypes } from 'src/app/model/expense';
 import { ActionService } from 'src/app/services/action/action.service';
@@ -18,7 +18,12 @@ export class DashboardComponent implements OnInit {
   todaysDate: string;
   dateSelected: Date;
   categories: any;
-  constructor(private modalController: ModalController, private dataService: DataService, private actionService: ActionService) {
+  sortIndex: number = 0;
+
+  constructor(private modalController: ModalController,
+    private dataService: DataService,
+    private actionService: ActionService,
+    private actionSheetController: ActionSheetController) {
     this.setExpenses();
     this.todaysDate = moment().format();
     this.resetDate();
@@ -46,12 +51,12 @@ export class DashboardComponent implements OnInit {
 
   async presentModal() {
     // TODO: uncomment this
-    // const modal = await this.modalController.create({
-    //   component: AddExpenseComponent,
-    //   cssClass: 'my-custom-class'
-    // });
-    // return await modal.present();
-    return await this.dataService.addExpense({ id: 1, amount: 100, description: 'Demo', type: 'Groceries', createdOn: new Date() });
+    const modal = await this.modalController.create({
+      component: AddExpenseComponent,
+      cssClass: 'my-custom-class'
+    });
+    return await modal.present();
+    // return await this.dataService.addExpense({ id: 1, amount: 100, description: 'Demo', type: 'Groceries', createdOn: new Date() });
   }
 
   selectedDate(date: string) {
@@ -68,5 +73,49 @@ export class DashboardComponent implements OnInit {
 
   deleteExpense(expense: Expense) {
     this.dataService.removeExpense(expense);
+  }
+
+  async filterActionSheet() {
+    if(this.sortIndex > 0){
+      this.filterAmount();
+      return;
+    }
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Filter By',
+      buttons: [{
+        text: 'Price',
+        icon: 'logo-usd',
+        handler: () => {
+          this.filterAmount();
+        }
+      }, {
+        text: 'Recents',
+        icon: 'server-outline',
+        handler: () => {
+          console.log('Favorite clicked');
+        }
+      }, {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          this.setExpenses();
+        }
+      }]
+    });
+    await actionSheet.present();
+  }
+
+  filterAmount(): void {
+    this.sortIndex += 1;
+    this.expenses.sort((a, b) => {
+      if (a.amount > b.amount) return this.sortIndex === 1 ? 1 : -1;
+      if (a.amount < b.amount) return this.sortIndex === 1 ? -1 : 1;
+      else 0;
+    });
+    if(this.sortIndex > 2) {
+      this.sortIndex = 0;
+      this.setExpenses();
+    }
   }
 }
