@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
-import { Expense } from 'src/app/model/expense';
+import { Expense, ExpenseTypes } from 'src/app/model/expense';
 import { ActionService } from 'src/app/services/action/action.service';
 import { DataService } from 'src/app/services/data/data.service';
 import { AddExpenseComponent } from 'src/app/shared/components/add-expense/add-expense.component';
@@ -17,10 +17,12 @@ export class DashboardComponent implements OnInit {
   totalSum: number = 0;
   todaysDate: string;
   dateSelected: Date;
+  categories: any;
   constructor(private modalController: ModalController, private dataService: DataService, private actionService: ActionService) {
     this.setExpenses();
     this.todaysDate = moment().format();
     this.resetDate();
+    this.categories = ExpenseTypes;
   }
 
   ngOnInit() { }
@@ -59,10 +61,7 @@ export class DashboardComponent implements OnInit {
     this.setExpenses();
   }
 
-  filterExpenses(value: string) {
-    this.dataService.getExpenses().then((expenses: Expense[]) => {
-      this.expenses = expenses.filter(expense => expense['type'] === value);;
-      this.calculateTotal();
-    });
+  deleteExpense(expense: Expense) {
+    this.dataService.removeExpense(expense);
   }
 }

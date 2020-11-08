@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { Expense } from 'src/app/model/expense';
+import { ActionService } from '../action/action.service';
+import { DataService } from '../data/data.service';
 
 const { Storage } = Plugins;
 
@@ -21,5 +22,9 @@ export class StorageService {
   async getObject(key: string): Promise<any> {
     const ret = await Storage.get({ key });
     return JSON.parse(ret.value);
+  }
+
+  async clearStorage(): Promise<void> {
+    return await Plugins.Storage.clear();
   }
 }

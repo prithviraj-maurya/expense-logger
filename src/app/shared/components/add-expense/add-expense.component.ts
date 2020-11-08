@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Expansion } from '@angular/compiler';
-import { Expense } from 'src/app/model/expense';
-import * as moment from 'moment';
+import { Expense, ExpenseTypes } from 'src/app/model/expense';
 import { DataService } from 'src/app/services/data/data.service';
 
 @Component({
@@ -12,6 +10,7 @@ import { DataService } from 'src/app/services/data/data.service';
   styleUrls: ['./add-expense.component.scss'],
 })
 export class AddExpenseComponent implements OnInit {
+  expenseTypes: any;
 
   addExpenseForm = new FormGroup({
     amount: new FormControl('', Validators.required),
@@ -20,7 +19,9 @@ export class AddExpenseComponent implements OnInit {
     createdOn: new FormControl('')
   });
 
-  constructor(private modalController: ModalController, private dataService: DataService) { }
+  constructor(private modalController: ModalController, private dataService: DataService) {
+    this.expenseTypes = ExpenseTypes;
+   }
 
   ngOnInit() {}
 

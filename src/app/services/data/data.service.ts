@@ -4,17 +4,16 @@ import { __values } from 'tslib';
 import { StorageService } from '../storage/storage.service';
 
 import { ActionService } from '../action/action.service';
-import { installedDate } from '../../model/expense';
 import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  private _expenses: Expense[] = [];
+  _expenses: Expense[] = [];
   dateSelected: Date;
 
-  constructor(private storageService: StorageService, private actionService: ActionService) { 
+  constructor(private storageService: StorageService, private actionService: ActionService) {
     this.dateSelected = this.actionService.getCurrentDate();
   }
 
@@ -29,11 +28,26 @@ export class DataService {
   addExpense(expense: Expense) {
     expense.createdOn = this.dateSelected;
     this._expenses.push(expense);
-    this.setExpenses(this._expenses);
+    this.saveExpenses(this._expenses);
+  }
+
+  saveExpenses(expenses: Expense[]) {
+    this.storageService.setObject(moment(this.dateSelected.toISOString()).format('L'), expenses);
   }
 
   setExpenses(expenses: Expense[]) {
-    this.storageService.setObject(moment(this.dateSelected.toISOString()).format('L'), expenses);
+    this._expenses = expenses;
+  }
+
+  resetExpenses() {
+    this.storageService.clearStorage().then(() => {
+      this._expenses.length = 0;
+    })
+  }
+
+  removeExpense(expense: Expense) {
+    this._expenses.splice(this._expenses.indexOf(expense), 1);
+    this._expenses.length > 0 ? this.saveExpenses(this._expenses) : this.resetExpenses();
   }
 
   getSelectedDate(): Date {

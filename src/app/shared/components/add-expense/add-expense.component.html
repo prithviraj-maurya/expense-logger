@@ -22,10 +22,7 @@
     <ion-item>
       <ion-label>Select Type</ion-label>
       <ion-select value="brown" okText="Okay" cancelText="Dismiss" interface="popover" formControlName="type">
-        <ion-select-option value="general">General</ion-select-option>
-        <ion-select-option value="groceries">Groceries</ion-select-option>
-        <ion-select-option value="meds">Meds</ion-select-option>
-        <ion-select-option value="clothes">Clothes</ion-select-option>
+        <ion-select-option [value]="type.value" *ngFor="let type of expenseTypes | keyvalue">{{ type.value }}</ion-select-option>
       </ion-select>
     </ion-item>
 
