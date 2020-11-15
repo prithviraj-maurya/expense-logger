@@ -11,10 +11,6 @@ import { AppRoutes } from '../../model/expense';
 })
 export class LoginComponent implements OnInit {
 
-  @ViewChild('loginFormCard', { static: true }) loginCard: HTMLElement;
-
-  private loginCardAnimation: any;
-
   showPassword = false;
 
   private loginForm: FormGroup = new FormGroup({
@@ -25,14 +21,14 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
   ) {
-    Plugins.Device.getInfo().then((deviceInfo) => {
-      if (deviceInfo.platform !== 'web') {
-        Plugins.Keyboard.setResizeMode({ mode: KeyboardResize.None });
-        Plugins.Keyboard.addListener('keyboardWillShow', () => {
-          console.log('Keyboard Event');
-        });
-      }
-    });
+    // Plugins.Device.getInfo().then((deviceInfo) => {
+    //   if (deviceInfo.platform !== 'web') {
+    //     Plugins.Keyboard.setResizeMode({ mode: KeyboardResize.None });
+    //     Plugins.Keyboard.addListener('keyboardWillShow', () => {
+    //       console.log('Keyboard Event');
+    //     });
+    //   }
+    // });
 
   }
 
