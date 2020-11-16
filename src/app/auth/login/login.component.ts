@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { KeyboardResize, Plugins } from '@capacitor/core';
 import { Router } from '@angular/router';
 import { AppRoutes } from '../../model/expense';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private angularFireAuth: AngularFireAuth
+    private authService: AuthService,
+    private userService: UserService
   ) {
     Plugins.Device.getInfo().then((deviceInfo) => {
       if (deviceInfo.platform !== 'web') {
@@ -34,17 +36,16 @@ export class LoginComponent implements OnInit {
   }
 
   doLogin(): void {
-   const loginFormValues = this.loginForm.value;
-   this.angularFireAuth.signInWithEmailAndPassword(loginFormValues.email, loginFormValues.password).then(res => {
-    
-   });
+    const { email, password } = this.loginForm.value;
+    this.authService.loginWithEmailAndPassword(email, password).then((res) => {
+      this.userService.setCurrentUser(res.user);
+      this.router.navigateByUrl(AppRoutes.TABS);
+    });
   }
 
   togglePasswordFieldType(): void {
     this.showPassword = !this.showPassword;
   }
 
-  ngOnInit(): void {
-    console.log(this.angularFireAuth.currentUser);
-  }
+  ngOnInit(): void { }
 }

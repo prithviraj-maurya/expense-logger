@@ -44,3 +44,17 @@ export enum ExpenseTypes {
     Water,
     Others
 }
+
+export interface User {
+    email: string;
+    phoneNumber?: string;
+    emailVerified?: boolean;
+    photoURL?: string;
+    refreshToken?: string;
+    metadata: {
+        creationTime?: string;
+        lastSignInTime?: string;
+    };
+    isAnonymous?: boolean;
+    displayName?: string;
+}
