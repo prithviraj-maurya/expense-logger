@@ -51,6 +51,19 @@ export class DataService {
     this.storageService.setObject(moment(this.dateSelected.toISOString()).format('L'), expenses);
   }
 
+  saveExpense(newExpense: Expense) {
+    let expenseIndex = -1;
+    for(let [index, expense] of this._expenses.entries()) {
+      if(expense.id === newExpense.id) {
+        expenseIndex = index;
+      }
+    }
+    if (expenseIndex !== -1) {
+      this._expenses[expenseIndex] = newExpense;
+      this.saveExpenses(this._expenses);
+    }
+  }
+
   setExpenses(expenses: Expense[]) {
     this._expenses = expenses;
     this.calculateTodaysTotal();

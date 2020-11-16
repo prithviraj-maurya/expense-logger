@@ -5,6 +5,7 @@ import { Expense, ExpenseTypes } from 'src/app/model/expense';
 import { ActionService } from 'src/app/services/action/action.service';
 import { DataService } from 'src/app/services/data/data.service';
 import { AddExpenseComponent } from 'src/app/shared/components/add-expense/add-expense.component';
+import { EditExpenseComponent } from 'src/app/shared/components/edit-expense/edit-expense.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -50,14 +51,24 @@ export class DashboardComponent implements OnInit {
   }
 
   async presentModal() {
-    // TODO: uncomment this
-    const modal = await this.modalController.create({
-      component: AddExpenseComponent,
-      cssClass: 'my-custom-class'
-    });
-    return await modal.present();
+      const modal = await this.modalController.create({
+        component: AddExpenseComponent,
+        cssClass: 'my-custom-class'
+      });
+      return await modal.present();
     // return await this.dataService.addExpense({ id: 1, amount: 100, description: 'Demo', type: 'Groceries', createdOn: new Date() });
   }
+
+  async editExpense(expense: Expense) {
+    const modal = await this.modalController.create({
+      component: AddExpenseComponent,
+      cssClass: 'my-custom-class',
+      componentProps: {
+        expense: expense
+      }
+    });
+    return await modal.present();
+}
 
   selectedDate(date: string) {
     this.dateSelected = this.actionService.createDateFromString(date);
@@ -76,7 +87,7 @@ export class DashboardComponent implements OnInit {
   }
 
   async filterActionSheet() {
-    if(this.sortIndex > 0){
+    if (this.sortIndex > 0) {
       this.filterAmount();
       return;
     }
@@ -113,7 +124,7 @@ export class DashboardComponent implements OnInit {
       if (a.amount < b.amount) return this.sortIndex === 1 ? -1 : 1;
       else 0;
     });
-    if(this.sortIndex > 2) {
+    if (this.sortIndex > 2) {
       this.sortIndex = 0;
       this.setExpenses();
     }

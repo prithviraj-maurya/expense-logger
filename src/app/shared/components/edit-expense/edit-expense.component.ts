@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Expense, ExpenseTypes } from 'src/app/model/expense';
 import { DataService } from 'src/app/services/data/data.service';
 
 @Component({
-  selector: 'app-add-expense',
-  templateUrl: './add-expense.component.html',
-  styleUrls: ['./add-expense.component.scss'],
+  selector: 'app-edit-expense',
+  templateUrl: './edit-expense.component.html',
+  styleUrls: ['./edit-expense.component.scss'],
 })
-export class AddExpenseComponent implements OnInit {
+export class EditExpenseComponent implements OnInit {
+
   expenseTypes: any;
-  @Input() expense: Expense;
 
   addExpenseForm = new FormGroup({
     amount: new FormControl('', Validators.required),
@@ -24,9 +24,7 @@ export class AddExpenseComponent implements OnInit {
     this.expenseTypes = ExpenseTypes;
    }
 
-  ngOnInit() {
-    this.expense && this.addExpenseForm.setValue(this.expense);
-  }
+  ngOnInit() {}
 
   dismissModal() {
     this.modalController.dismiss({
@@ -40,9 +38,4 @@ export class AddExpenseComponent implements OnInit {
     this.dismissModal();
   }
 
-  saveExpense() {
-    const expense: Expense = this.addExpenseForm.value;
-    this.dataService.saveExpense(expense);
-    this.dismissModal();
-  }
 }
