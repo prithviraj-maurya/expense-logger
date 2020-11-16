@@ -19,12 +19,14 @@ export class SettingsComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private router: Router) {
-    this.userService.getCurrentUser().subscribe(user => {
-      this.currentUser = user;
-    });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.userService.getCurrentUser().subscribe(user => {
+      this.currentUser = user;
+      console.log(this.currentUser);
+    });
+   }
 
   clearData() {
     this.dataService.resetExpenses().then(() => {
@@ -37,16 +39,28 @@ export class SettingsComponent implements OnInit {
       id: 'appResetAlert',
       header: 'App Reset Successful!',
       buttons: [{
-        text: 'Go To Login',
+        text: 'Go To Dashboard',
         handler
       }],
     });
-    await alert.present();
+    await alert.present().then(() => {
+      this.router.navigateByUrl(AppRoutes.TABS);
+    });
   }
 
-  doLogout() {
-    this.authService.logout().then(() => {
-      this.router.navigateByUrl(AppRoutes.LOGIN);
+  async doLogout(handler?: any) {
+    this.authService.logout().then(async () => {
+      const alert = await this.alertController.create({
+        id: 'appResetAlert',
+        header: 'Successfully Logged Out',
+        buttons: [{
+          text: 'Go To Login',
+          handler
+        }],
+      });
+      await alert.present().then(() => {
+        this.router.navigateByUrl(AppRoutes.LOGIN);
+      });
     });
   }
 }

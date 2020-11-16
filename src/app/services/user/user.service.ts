@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from 'src/app/model/expense';
 
 @Injectable({
@@ -7,19 +7,18 @@ import { User } from 'src/app/model/expense';
 })
 export class UserService {
 
+  private currentUserObservable: BehaviorSubject<User> = new BehaviorSubject<User>(null);
   private currentUser: User;
 
   constructor() { }
 
-  getCurrentUser(): Observable<User> {
-    return new Observable(observer => {
-      if(this.currentUser) {
-        observer.next(this.currentUser);
-      }
-    });
+  getCurrentUser(): BehaviorSubject<User> {
+    return this.currentUserObservable;
   }
 
   setCurrentUser(user: User) {
-    this.currentUser = user;
+    this.currentUser = <User>user;
+    this.currentUserObservable.next(this.currentUser);
   }
+
 }
