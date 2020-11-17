@@ -6,8 +6,14 @@
 
 <ion-content *ngIf="currentUser">
   <ion-img src="assets/avatar-image.png" width="100" height="100"></ion-img>
-  <ion-label>{{ curentUser.email }}</ion-label>
 </ion-content>
+<ion-card>
+  <ion-card-header>
+    <ion-card-title class="ion-text-center">
+      Email: {{email}}
+    </ion-card-title>
+  </ion-card-header>
+</ion-card>
 <ion-footer>
   <ion-button expand="full" color="danger" (click)="doLogout()">Logout</ion-button>
   <ion-button expand="full" color="danger" (click)="clearData()">Reset Data</ion-button>

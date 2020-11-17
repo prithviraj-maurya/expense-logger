@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class SettingsComponent implements OnInit {
   currentUser: User;
+  email: string = '';
 
   constructor(private dataService: DataService,
     private alertController: AlertController,
@@ -24,6 +25,7 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.userService.getCurrentUser().subscribe(user => {
       this.currentUser = user;
+      this.email = user && user.email;
       console.log(this.currentUser);
     });
    }
