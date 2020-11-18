@@ -7,11 +7,15 @@ export interface Expense {
     createdOn: Date;
 }
 
-export const installedDate = "InstalledDate";
+export enum StorageKeys {
+    INSTALL_DATE = 'INSTALL_DATE',
+    ACTIVE_USER = 'ACTIVE_USER',
+}
 
 export enum AppRoutes {
     LOGIN = '/auth/login',
     REGISTER = '/auth/register',
+    FORGOT_PASSWORD = 'auth/forgot-password',
     TABS = '/tabs',
     AUTH = '/auth'
 }
