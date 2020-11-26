@@ -1,0 +1,15 @@
+Deploy ionic project on github pages
+    - https://stackoverflow.com/questions/53036381/how-to-deploy-ionic-4-app-to-github-pages
+
+Highchart Article for ionic:
+    - https://medium.com/enappd/create-charts-in-ionic-4-apps-and-pwa-using-highcharts-63f8a00bae06  
+
+Add dark theme for highchart:
+    - https://stackoverflow.com/questions/52958769/changing-themes-using-highcharts-angular
+
+Placing labels inside pie chart:
+    - https://stackoverflow.com/questions/25334551/placing-labels-inside-pie-chart-slices-highchart
+
+Highchart series type error
+    - https://stackoverflow.com/questions/61993148/type-number-has-no-properties-in-common-with-type-xrangepointoptionsobject (3rd answer)
+             

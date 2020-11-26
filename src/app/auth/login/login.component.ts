@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
   showPassword = false;
 
-  private loginForm: FormGroup = new FormGroup({
+  loginForm: FormGroup = new FormGroup({
     email: new FormControl('test1@gmail.com', [Validators.required, Validators.email]),
     password: new FormControl('hello123', [Validators.required, Validators.min(8)])
   });

@@ -11,7 +11,7 @@ import { ActionService } from 'src/app/services/action/action.service';
 })
 export class ForgotPasswordComponent {
 
-  private forgotPasswordForm: FormGroup = new FormGroup({
+  forgotPasswordForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email])
   });
 
