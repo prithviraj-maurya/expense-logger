@@ -14,6 +14,7 @@ export class AddExpenseComponent implements OnInit {
   @Input() expense: Expense;
 
   addExpenseForm = new FormGroup({
+    id: new FormControl(''),
     amount: new FormControl('', Validators.required),
     type: new FormControl('', Validators.required),
     description: new FormControl(''),
@@ -42,6 +43,9 @@ export class AddExpenseComponent implements OnInit {
 
   saveExpense() {
     const expense: Expense = this.addExpenseForm.value;
+    if(this.expense) {
+      expense.id = this.expense.id;
+    }
     this.dataService.saveExpense(expense);
     this.dismissModal();
   }

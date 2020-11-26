@@ -3,6 +3,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'src/app/model/expense';
+import { UserService } from 'src/app/services/user/user.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-register',
@@ -20,14 +22,17 @@ export class RegisterComponent implements OnInit {
     passwordConfirm: new FormControl('', [Validators.min(8), Validators.required])
   });
 
-  constructor(private fireAuth: AngularFireAuth, private router: Router) { }
+  constructor(private fireAuth: AngularFireAuth, private router: Router, private userService: UserService) { }
 
   ngOnInit() { }
 
   doRegister() {
     const { email, password } = this.registerForm.value;
     email && password && this.fireAuth.createUserWithEmailAndPassword(email, password).then(response => {
-      return response !== null ? this.router.navigateByUrl(AppRoutes.LOGIN) : false;
+      if (response !== null) {
+        this.userService.setInstalledDate(moment().format("L"));
+        this.router.navigateByUrl(AppRoutes.LOGIN)
+      };
     });
   }
 

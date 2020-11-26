@@ -13,10 +13,11 @@ import * as moment from 'moment';
 })
 export class BudgetComponent implements OnInit {
 
-  expenses: Expense[];
+  expenses: Expense[] = [];
   distance;
+  showPieChart = false;
   constructor(private dataService: DataService) {
-    this.dataService.getExpenses().then((expenses: Expense[]) => {
+    this.dataService.getExpensesBehaviour().subscribe((expenses: Expense[]) => {
       this.expenses = expenses;
     });
     this.getWindowSize();
@@ -30,7 +31,9 @@ export class BudgetComponent implements OnInit {
   ngOnInit() { }
 
   ionViewDidEnter() {
-    this.plotPieChart();
+    if (this.expenses && this.expenses.length > 0) {
+      this.plotPieChart();
+    }
     this.plotLineChart();
   }
 
@@ -125,7 +128,7 @@ export class BudgetComponent implements OnInit {
   }
 
   plotLineChart() {
-    const installedYear = moment(this.dataService.getInstalledDate()).format('YYYY');
+    const installedYear = moment(new Date(this.dataService.getInstalledDate())).format('YYYY');
     let linechart = HighCharts.chart('linechart', {
       title: {
         text: 'Yearly Spend'

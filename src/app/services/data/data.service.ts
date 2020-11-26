@@ -12,7 +12,8 @@ import { chart } from 'highcharts';
   providedIn: 'root'
 })
 export class DataService {
-  _expenses: Expense[] = [];
+  _expenses: BehaviorSubject<Expense[]>;
+  expenses: Expense[];
   dateSelected: Date;
   _todayTotalExpense: BehaviorSubject<number>;
   todaysTotal: number;
@@ -20,11 +21,15 @@ export class DataService {
   allExpenses: Expense[] = [];
   _allExpenses: BehaviorSubject<Expense[]>;
   allExpenseDates: Array<string> = [];
+  id = 0;
 
   constructor(private storageService: StorageService, private actionService: ActionService) {
     this.dateSelected = this.actionService.getCurrentDate();
     this._todayTotalExpense = new BehaviorSubject<number>(0);
+    this._expenses = new BehaviorSubject<Expense[]>([]);
+    this.expenses = [];
     this._allExpenses = new BehaviorSubject<Expense[]>([]);
+    this.storageService.setObject(StorageKeys.INSTALL_DATE, "11/16/2015");
     this.storageService.setObject("11/26/2015", {
       amount: 1000,
       createdOn: "2015-11-26T07:38:11.000Z",
@@ -50,18 +55,23 @@ export class DataService {
       type: "Furniture"
     });
     this.storageService.getObject(StorageKeys.INSTALL_DATE).then(result => {
-      this.installedDate = result;
+      this.installedDate = result || moment().format('L');
       this.getAllExpenses();
+    });
+    this.getExpenses();
+  }
+
+  getExpenses() {
+    const key: string = moment(this.dateSelected.toISOString()).format('L');
+    this.storageService.getObject(key).then(data => {
+      this.calculateTodaysTotal();
+      this.expenses = data || [];
+      this._expenses.next(data);
     });
   }
 
-  getExpenses(): Promise<Expense[]> {
-    const key: string = moment(this.dateSelected.toISOString()).format('L');
-    return this.storageService.getObject(key).then(data => {
-      this._expenses = data || [];
-      this.calculateTodaysTotal();
-      return this._expenses;
-    });
+  getExpensesBehaviour(): BehaviorSubject<Expense[]> {
+    return this._expenses;
   }
 
   getAllExpenses() {
@@ -82,6 +92,11 @@ export class DataService {
     });
   }
 
+  pushExpense(expense) {
+    this.allExpenses.push(expense);
+    this._allExpenses.next(this.allExpenses);
+  }
+
   getAllExpensesBehaviour(): BehaviorSubject<Expense[]> {
     return this._allExpenses;
   }
@@ -90,7 +105,7 @@ export class DataService {
     let dateArray = new Array();
     let currentDate = startDate;
     while (currentDate <= stopDate) {
-      dateArray.push(moment(new Date(currentDate).toString()).format(format));
+      dateArray.push(moment(new Date(currentDate).toISOString()).format(format));
       currentDate = this.addDays(currentDate, 1);
     }
     return dateArray;
@@ -116,52 +131,59 @@ export class DataService {
 
   calculateTodaysTotal() {
     this.todaysTotal = 0;
-    this._expenses && this._expenses.map(expense => this.todaysTotal += expense.amount);
+    this.expenses && this.expenses.map(expense => this.todaysTotal += expense.amount);
     this._todayTotalExpense.next(this.todaysTotal);
   }
 
   addExpense(expense: Expense) {
     expense.createdOn = this.dateSelected;
-    this._expenses.push(expense);
-    this.saveExpenses(this._expenses);
+    expense.id = this.id;
+    this.id++;
+    this.expenses.push(expense);
+    console.log("Adding expense");
+    console.log(expense);
+    this.saveExpenses(this.expenses);
     this.calculateTodaysTotal();
+    this.pushExpense(expense);
   }
 
   saveExpenses(expenses: Expense[]) {
     if (!this.installedDate) {
-      this.storageService.setObject(StorageKeys.INSTALL_DATE, moment(this.dateSelected.toISOString()).format('L'));
+      this.storageService.setObject(StorageKeys.INSTALL_DATE, moment().format('L'));
     }
     this.storageService.setObject(moment(this.dateSelected.toISOString()).format('L'), expenses);
+    this.getExpenses();
   }
 
   saveExpense(newExpense: Expense) {
     let expenseIndex = -1;
-    for (let [index, expense] of this._expenses.entries()) {
+    for (let [index, expense] of this.expenses.entries()) {
       if (expense.id === newExpense.id) {
         expenseIndex = index;
       }
     }
     if (expenseIndex !== -1) {
-      this._expenses[expenseIndex] = newExpense;
-      this.saveExpenses(this._expenses);
+      this.expenses[expenseIndex] = newExpense;
+      this.saveExpenses(this.expenses);
+      this.pushExpense(newExpense);
     }
   }
 
   setExpenses(expenses: Expense[]) {
-    this._expenses = expenses;
+    this.expenses = expenses;
     this.calculateTodaysTotal();
   }
 
   resetExpenses(): Promise<void> {
     return this.storageService.clearStorage().then(() => {
-      this._expenses.length = 0;
+      this.expenses.length = 0;
       this.calculateTodaysTotal();
     });
   }
 
   removeExpense(expense: Expense) {
-    this._expenses.splice(this._expenses.indexOf(expense), 1);
-    this._expenses.length > 0 ? this.saveExpenses(this._expenses) : this.resetExpenses();
+    this.expenses.splice(this.expenses.indexOf(expense), 1);
+    this.expenses.length > 0 ? this.saveExpenses(this.expenses) : this.resetExpenses();
     this.calculateTodaysTotal();
   }
 
@@ -171,6 +193,7 @@ export class DataService {
 
   setSelectedDate(date: Date) {
     this.dateSelected = date;
+    this.getExpenses();
   }
 
   createPieChartData(categorySum: Array<Object>): Array<Object> {

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AppRoutes } from '../../model/expense';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user/user.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
   ) {
     Plugins.Device.getInfo().then((deviceInfo) => {
       if (deviceInfo.platform !== 'web') {
@@ -39,6 +40,9 @@ export class LoginComponent implements OnInit {
     const { email, password } = this.loginForm.value;
     this.authService.loginWithEmailAndPassword(email, password).then((res) => {
       this.userService.setCurrentUser(res.user);
+      console.log("User logged in");
+      console.log(res.user);
+      this.userService.setInstalledDate(moment(res.user.metadata.creationTime).format('L'));
       this.router.navigateByUrl(AppRoutes.TABS);
     });
   }

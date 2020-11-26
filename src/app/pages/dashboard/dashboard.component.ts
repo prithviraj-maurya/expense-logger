@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() { }
 
   setExpenses() {
-    this.dataService.getExpenses().then((expenses: Expense[]) => {
+    this.dataService.getExpensesBehaviour().subscribe((expenses: Expense[]) => {
       this.expenses = expenses;
     });
   }
@@ -73,13 +73,11 @@ export class DashboardComponent implements OnInit {
   selectedDate(date: string) {
     this.dateSelected = this.actionService.createDateFromString(date);
     this.dataService.setSelectedDate(this.dateSelected);
-    this.setExpenses();
   }
 
   resetDate() {
     this.dateSelected = moment(this.todaysDate).toDate();
     this.dataService.setSelectedDate(this.dateSelected);
-    this.setExpenses();
   }
 
   deleteExpense(expense: Expense) {

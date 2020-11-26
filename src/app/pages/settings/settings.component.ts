@@ -23,7 +23,7 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userService.getCurrentUser().subscribe(user => {
+    this.userService.getCurrentUserBehaviour().subscribe(user => {
       this.currentUser = user;
       this.email = user && user.email;
       console.log(this.currentUser);
