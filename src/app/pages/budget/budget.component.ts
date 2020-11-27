@@ -20,6 +20,13 @@ export class BudgetComponent implements OnInit {
   constructor(private dataService: DataService) {
     this.dataService.getExpensesBehaviour().subscribe((expenses: Expense[]) => {
       this.expenses = expenses;
+      if(this.expenses && this.expenses.length > 0) {
+        this.showPieChart = true;
+        this.plotPieChart();
+      }
+      else {
+        this.showPieChart = false;
+      }
     });
     this.getWindowSize();
   }
@@ -30,13 +37,6 @@ export class BudgetComponent implements OnInit {
   }
 
   ngOnInit() { }
-
-  ionViewDidEnter() {
-    if (this.expenses && this.expenses.length > 0) {
-      this.plotPieChart();
-    }
-    // this.plotLineChart();
-  }
 
   showYearlyExpensePlot() {
     this.plotLineChart();

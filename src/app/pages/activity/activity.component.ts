@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivityLogs, ExpenseTypes, ActionTypes } from 'src/app/model/expense';
+import { ActionService } from 'src/app/services/action/action.service';
 
 @Component({
   selector: 'app-activity',
@@ -7,8 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ActivityComponent implements OnInit {
 
-  constructor() { }
+  activityLogs: ActivityLogs[]; 
+  constructor(private actionService: ActionService) {
+    this.actionService.getActivityLogs().subscribe((logs: ActivityLogs[]) => {
+      this.activityLogs = logs;
+    });
+   }
 
   ngOnInit() {}
+
+  clearLogs() {
+    this.actionService.clearLogs();
+  }
 
 }

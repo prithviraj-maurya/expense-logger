@@ -2,11 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { KeyboardResize, Plugins } from '@capacitor/core';
 import { Router } from '@angular/router';
-import { AppRoutes } from '../../model/expense';
+import { ActionTypes, AppRoutes, Expense } from '../../model/expense';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user/user.service';
 import * as moment from 'moment';
 import { LoadingController } from '@ionic/angular';
+import { ActionService } from 'src/app/services/action/action.service';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private userService: UserService,
+    private actionService: ActionService,
     private loadingController: LoadingController
   ) {
     Plugins.Device.getInfo().then((deviceInfo) => {
@@ -50,6 +52,8 @@ export class LoginComponent implements OnInit {
       console.log("User logged in");
       console.log(res.user);
       this.userService.setInstalledDate(moment(res.user.metadata.creationTime).format('L'));
+      let expense: Expense;
+      this.actionService.addActivityLog(expense, ActionTypes.LOG_IN);
       this.router.navigateByUrl(AppRoutes.TABS);
     });
   }

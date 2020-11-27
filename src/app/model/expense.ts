@@ -10,6 +10,7 @@ export interface Expense {
 export enum StorageKeys {
     INSTALL_DATE = 'INSTALL_DATE',
     ACTIVE_USER = 'ACTIVE_USER',
+    ACTIVITY_LOGS = 'ACTIVITY_LOGS'
 }
 
 export enum AppRoutes {
@@ -61,4 +62,17 @@ export interface User {
     };
     isAnonymous?: boolean;
     displayName?: string;
+}
+
+export interface ActivityLogs {
+    datetime: Date,
+    category: string,
+    actionType: string
+}
+
+export enum ActionTypes {
+    ADD_EXPENSE = 'Added Expense',
+    DELETE_EXPENSE = 'Removed Expense',
+    LOG_IN = 'Logged In',
+    EDIT_EXPENSE = 'Edited Expense'
 }

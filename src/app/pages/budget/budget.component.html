@@ -1,6 +1,6 @@
 <ion-content>
   <ion-list-header color="light">Budget</ion-list-header>
-  <ion-card class="card-pie" *ngIf="expenses">
+  <ion-card class="card-pie" [hidden]="!showPieChart">
     <ion-card-header>
       <ion-card-title>Spend Chart</ion-card-title>
     </ion-card-header>

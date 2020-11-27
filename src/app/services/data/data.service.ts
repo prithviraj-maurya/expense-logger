@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Expense, StorageKeys } from 'src/app/model/expense';
+import { ActionTypes, Expense, StorageKeys } from 'src/app/model/expense';
 import { __values } from 'tslib';
 import { StorageService } from '../storage/storage.service';
 
@@ -145,6 +145,7 @@ export class DataService {
     this.saveExpenses(this.expenses);
     this.calculateTodaysTotal();
     this.pushExpense(expense);
+    this.actionService.addActivityLog(expense, ActionTypes.ADD_EXPENSE);
   }
 
   saveExpenses(expenses: Expense[]) {
@@ -167,6 +168,7 @@ export class DataService {
       this.saveExpenses(this.expenses);
       this.pushExpense(newExpense);
     }
+    this.actionService.addActivityLog(newExpense, ActionTypes.EDIT_EXPENSE);
   }
 
   setExpenses(expenses: Expense[]) {
@@ -178,6 +180,7 @@ export class DataService {
     return this.storageService.clearStorage().then(() => {
       this.expenses.length = 0;
       this.calculateTodaysTotal();
+      this._expenses.next(this.expenses);
     });
   }
 
@@ -185,6 +188,7 @@ export class DataService {
     this.expenses.splice(this.expenses.indexOf(expense), 1);
     this.expenses.length > 0 ? this.saveExpenses(this.expenses) : this.resetExpenses();
     this.calculateTodaysTotal();
+    this.actionService.addActivityLog(expense, ActionTypes.DELETE_EXPENSE)
   }
 
   getSelectedDate(): Date {

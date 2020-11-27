@@ -2,4 +2,28 @@
   <ion-toolbar>
     <ion-title>Activity</ion-title>
   </ion-toolbar>
+  <ion-card *ngIf="activityLogs.length === 0">
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">
+        No Logs Available
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-card *ngFor="let activity of activityLogs">
+    <ion-card-content>
+      <ion-label>Date: {{ activity.datetime | date }}</ion-label>
+    </ion-card-content>
+    <ion-card-content *ngIf="activity.actionType !== 'Logged In'">
+      <ion-text>Category: {{ activity.category }}</ion-text>
+    </ion-card-content>
+    <ion-card-content>
+      <ion-text>Action: {{ activity.actionType }}</ion-text>
+    </ion-card-content>
+  </ion-card>
 </ion-header>
+
+<ion-footer *ngIf="activityLogs.length !== 0">
+  <ion-button expand="full" color="danger" (click)="clearLogs()">
+    Clear Logs
+  </ion-button>
+</ion-footer>
