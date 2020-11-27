@@ -9,6 +9,9 @@
       </ion-card-title>
     </ion-card-header>
   </ion-card>
+</ion-header>
+
+<ion-content>
   <ion-card *ngFor="let activity of activityLogs">
     <ion-card-content>
       <ion-label>Date: {{ activity.datetime | date }}</ion-label>
@@ -19,11 +22,8 @@
     <ion-card-content>
       <ion-text>Action: {{ activity.actionType }}</ion-text>
     </ion-card-content>
+    <ion-card-content>
+      <ion-text>Amount: {{ activity.amount }}</ion-text>
+    </ion-card-content>
   </ion-card>
-</ion-header>
-
-<ion-footer *ngIf="activityLogs.length !== 0">
-  <ion-button expand="full" color="danger" (click)="clearLogs()">
-    Clear Logs
-  </ion-button>
-</ion-footer>
+</ion-content>

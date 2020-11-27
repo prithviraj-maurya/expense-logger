@@ -11,15 +11,11 @@ export class ActivityComponent implements OnInit {
 
   activityLogs: ActivityLogs[]; 
   constructor(private actionService: ActionService) {
-    this.actionService.getActivityLogs().subscribe((logs: ActivityLogs[]) => {
+    this.actionService.getActivityLogsSubject().subscribe((logs: ActivityLogs[]) => {
       this.activityLogs = logs;
     });
    }
 
   ngOnInit() {}
-
-  clearLogs() {
-    this.actionService.clearLogs();
-  }
 
 }

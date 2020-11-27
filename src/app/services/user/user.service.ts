@@ -12,7 +12,11 @@ export class UserService {
   private currentUserObservable: BehaviorSubject<User> = new BehaviorSubject<User>(null);
   private currentUser: User;
 
-  constructor(private storageService: StorageService) { }
+  constructor(private storageService: StorageService) {
+    this.getCurrentUser().then(user => {
+      this.currentUserObservable.next(user);
+    })
+  }
 
   getCurrentUserBehaviour(): BehaviorSubject<User> {
     return this.currentUserObservable;

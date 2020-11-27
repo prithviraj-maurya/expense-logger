@@ -188,6 +188,17 @@ export class DataService {
     this.expenses.splice(this.expenses.indexOf(expense), 1);
     this.expenses.length > 0 ? this.saveExpenses(this.expenses) : this.resetExpenses();
     this.calculateTodaysTotal();
+    // remove from all expenses
+    let expenseIndex = -1;
+    this.allExpenses.forEach((exp, index) => {
+      if(exp.id === expense.id) {
+        expenseIndex = index;
+      }
+    })
+    if(expenseIndex > -1) {
+      this.allExpenses.splice(expenseIndex, 1);
+      this._allExpenses.next(this.allExpenses);
+    }
     this.actionService.addActivityLog(expense, ActionTypes.DELETE_EXPENSE)
   }
 

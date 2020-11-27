@@ -16,6 +16,9 @@ export class ActionService {
   constructor(private alertController: AlertController,private router: Router, private storageService: StorageService) {
     this.activityLogs = [];
     this.activityLogsSubject = new BehaviorSubject<ActivityLogs[]>([]);
+    this.getActivityLogs().then(logs => {
+      this.activityLogsSubject.next(logs);
+    });
    }
 
   getCurrentDateString(date?: Date): string {
@@ -44,7 +47,11 @@ export class ActionService {
     });
   }
 
-  getActivityLogs(): BehaviorSubject<ActivityLogs[]> {
+  getActivityLogs(): Promise<ActivityLogs[]> {
+    return this.storageService.getObject(StorageKeys.ACTIVITY_LOGS);
+  }
+
+  getActivityLogsSubject(): BehaviorSubject<ActivityLogs[]> {
     return this.activityLogsSubject;
   }
 
@@ -54,14 +61,16 @@ export class ActionService {
       activityLog = {
         datetime: new Date(),
         category: '',
-        actionType: action
+        actionType: action,
+        amount: 0
       }
     }
     else {
       activityLog = {
         datetime: expense.createdOn,
         category: expense.type,
-        actionType: action
+        actionType: action,
+        amount: expense.amount
       }
     }
     this.activityLogs.push(activityLog);

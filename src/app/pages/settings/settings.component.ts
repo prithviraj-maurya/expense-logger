@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AppRoutes, User } from 'src/app/model/expense';
+import { ActionService } from 'src/app/services/action/action.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { DataService } from 'src/app/services/data/data.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -19,6 +20,7 @@ export class SettingsComponent implements OnInit {
     private alertController: AlertController,
     private authService: AuthService,
     private userService: UserService,
+    private actionService: ActionService,
     private router: Router) {
   }
 
@@ -64,5 +66,9 @@ export class SettingsComponent implements OnInit {
         this.router.navigateByUrl(AppRoutes.LOGIN);
       });
     });
+  }
+
+  clearLogs() {
+    this.actionService.clearLogs();
   }
 }

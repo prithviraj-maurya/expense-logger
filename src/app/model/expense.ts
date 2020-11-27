@@ -67,7 +67,8 @@ export interface User {
 export interface ActivityLogs {
     datetime: Date,
     category: string,
-    actionType: string
+    actionType: string,
+    amount: number
 }
 
 export enum ActionTypes {
