@@ -6,6 +6,7 @@ import { AppRoutes } from '../../model/expense';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user/user.service';
 import * as moment from 'moment';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -21,10 +22,13 @@ export class LoginComponent implements OnInit {
     password: new FormControl('hello123', [Validators.required, Validators.min(8)])
   });
 
+  loadingScreen;
+
   constructor(
     private router: Router,
     private authService: AuthService,
     private userService: UserService,
+    private loadingController: LoadingController
   ) {
     Plugins.Device.getInfo().then((deviceInfo) => {
       if (deviceInfo.platform !== 'web') {
@@ -34,11 +38,14 @@ export class LoginComponent implements OnInit {
         });
       }
     });
+    this.presentLoading();
   }
 
-  doLogin(): void {
+  async doLogin(): Promise<void> {
     const { email, password } = this.loginForm.value;
-    this.authService.loginWithEmailAndPassword(email, password).then((res) => {
+    await this.loadingScreen.present();
+    this.authService.loginWithEmailAndPassword(email, password).then(async (res) => {
+      await this.loadingScreen.dismiss();
       this.userService.setCurrentUser(res.user);
       console.log("User logged in");
       console.log(res.user);
@@ -52,4 +59,13 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void { }
+
+  async presentLoading() {
+    this.loadingScreen = await this.loadingController.create({
+      message: 'Logging in...',
+      duration: 2000
+    });
+    // await this.loadingScreen.present();
+    // const { role, data } = await this.loadingScreen.onDidDismiss();
+  }
 }

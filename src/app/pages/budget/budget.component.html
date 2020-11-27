@@ -12,7 +12,11 @@
     <ion-card-header>
       <ion-card-title></ion-card-title>
     </ion-card-header>
-    <ion-card-content>
+    <ion-button expand="full" (click)="showYearlyExpensePlot()" *ngIf="!showLineChart">
+      Show Yearly Expense Plot
+    </ion-button>
+    <ion-card-content [hidden]="!showLineChart">
+      <ion-spinner name="circles" *ngIf="!showLineChart" slot="center"></ion-spinner>
       <div id="linechart" style="width:100%; height:400px;"></div>
     </ion-card-content>
   </ion-card>

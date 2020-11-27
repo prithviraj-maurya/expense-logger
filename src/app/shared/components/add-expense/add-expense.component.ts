@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Expense, ExpenseTypes } from 'src/app/model/expense';
 import { DataService } from 'src/app/services/data/data.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-expense',
@@ -12,6 +13,7 @@ import { DataService } from 'src/app/services/data/data.service';
 export class AddExpenseComponent implements OnInit {
   expenseTypes: any;
   @Input() expense: Expense;
+  loadingScreen;
 
   addExpenseForm = new FormGroup({
     id: new FormControl(''),
@@ -21,9 +23,11 @@ export class AddExpenseComponent implements OnInit {
     createdOn: new FormControl('')
   });
 
-  constructor(private modalController: ModalController, private dataService: DataService) {
+  constructor(private modalController: ModalController,
+    private dataService: DataService,
+    private loadingController: LoadingController) {
     this.expenseTypes = ExpenseTypes;
-   }
+  }
 
   ngOnInit() {
     this.expense && this.addExpenseForm.setValue(this.expense);
@@ -35,6 +39,13 @@ export class AddExpenseComponent implements OnInit {
     });
   }
 
+  async presentLoading() {
+    this.loadingScreen = await this.loadingController.create({
+      message: 'Please wait...',
+      duration: 2000
+    });
+  }
+
   addExpense() {
     const expense: Expense = this.addExpenseForm.value;
     this.dataService.addExpense(expense);
@@ -43,7 +54,7 @@ export class AddExpenseComponent implements OnInit {
 
   saveExpense() {
     const expense: Expense = this.addExpenseForm.value;
-    if(this.expense) {
+    if (this.expense) {
       expense.id = this.expense.id;
     }
     this.dataService.saveExpense(expense);

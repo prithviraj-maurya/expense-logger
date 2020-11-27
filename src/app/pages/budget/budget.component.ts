@@ -16,6 +16,7 @@ export class BudgetComponent implements OnInit {
   expenses: Expense[] = [];
   distance;
   showPieChart = false;
+  showLineChart = false;
   constructor(private dataService: DataService) {
     this.dataService.getExpensesBehaviour().subscribe((expenses: Expense[]) => {
       this.expenses = expenses;
@@ -34,6 +35,10 @@ export class BudgetComponent implements OnInit {
     if (this.expenses && this.expenses.length > 0) {
       this.plotPieChart();
     }
+    // this.plotLineChart();
+  }
+
+  showYearlyExpensePlot() {
     this.plotLineChart();
   }
 
@@ -81,6 +86,7 @@ export class BudgetComponent implements OnInit {
     });
     console.log("line chart data");
     console.log(chartData);
+    this.showLineChart = true;
     return chartData;
   }
 
